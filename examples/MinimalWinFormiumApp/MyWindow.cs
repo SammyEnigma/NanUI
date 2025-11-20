@@ -8,18 +8,18 @@ using NetDimension.NanUI.CefGlue;
 using NetDimension.NanUI.Forms;
 using NetDimension.NanUI.JavaScript;
 
-
 namespace MinimalWinFormiumApp;
+
 internal class MyWindow : Formium
 {
-    public MyWindow() { }
+    public MyWindow()
+    { }
 
     public MyWindow(ChromiumEnvironment env) // 依赖注入测试; Dependency Injection Testing;
     {
-
         //默认测试，加载普通网页
         //Default test, load web page
-        Url = "https://www.bing.com";
+        //Url = "https://www.bing.com";
 
         //测试加载本地资源
         //Test loading local resources
@@ -36,15 +36,11 @@ internal class MyWindow : Formium
         //注意，默认没有指定任何Url，新版WinFormium将会自动加载一个欢迎页面。
         //If no URL is specified, WinFormium will automatically load a welcome page.
 
-
         //这个事件对应WinForm的Load事件，对应NanUI的OnReady抽象方法
         //OnReady of old version NanUI
         Loaded += MyWindow_Loaded;
 
-
         PageLoadEnd += MyWindow_PageLoadEnd;
-
-
     }
 
     private void MyWindow_Loaded(object? sender, BrowserEventArgs e)
@@ -60,7 +56,6 @@ internal class MyWindow : Formium
         // Register front-end message handler. For example, by registering “bbb” here, you can send messages to this handler from the front-end using the formium.postMessage("bbb", "[any data type/string/number/array/object]") method.
         RegisterJavaScriptMessagHandler("bbb", args =>
         {
-
         });
 
         // 注册前端请求处理器，请求处理和消息处理器的不同在于，消息处理器不需要返回结果，而请求处理器需要返回结果。
@@ -78,15 +73,12 @@ internal class MyWindow : Formium
 
         // 前端的formium.sendHostWindowRequestAsync()方法将返回一个可等待的promise对象，可以使用await关键字来等待这个promise对象的执行结果。当然，使用传统的then/catch方法也可以。
         // The front-end's formium.sendHostWindowRequestAsync() method will return a awaitable promise object. You can use the await keyword to wait for the execution result of this promise object. Alternatively, you can also use the traditional then/catch methods.
-        RegisterJavaScriptRequestHandler("aaa", async (args, promise) => {
-
+        RegisterJavaScriptRequestHandler("aaa", async (args, promise) =>
+        {
             await Task.Delay(3000);
 
             promise.Resolve("OK async");
-
         });
-
-
     }
 
     private void MyWindow_PageLoadEnd(object? sender, PageLoadEndEventArgs e)
@@ -105,9 +97,7 @@ internal class MyWindow : Formium
 
                 PostJavaScriptMessage("test", DateTime.Now);
             }
-
         });
-
     }
 
     // 使用对象映射的方式来为WinFormium提供可前后端交互的JavaScript对象。
@@ -170,11 +160,8 @@ internal class MyWindow : Formium
         EndRegisterJavaScriptObject(hbrjso);
     }
 
-
     private async void TestJSEngine()
     {
-
-
         // 执行带结果的JavaScript表达式，如果不需要返回结果，可以使用ExecuteJavaScript方法。
         // Execute JavaScript expressions with results. If you don't need to return results, you can use the ExecuteJavaScript method.
         var retval = await EvaluateJavaScriptAsync("3+4");
@@ -230,7 +217,6 @@ internal class MyWindow : Formium
             promise.Reject("Rejected for retval5.");
         }));
 
-
         InvokeOnUIThread(() => { MessageBox.Show(this, $"value1={value1} value2={value2}"); });
     }
 
@@ -240,15 +226,17 @@ internal class MyWindow : Formium
 
         style.Size = new System.Drawing.Size(1440, 900);
 
+        style.StartCentered = StartCenteredMode.CenterScreen;
+
         // 移除系统窗体的标题栏
         // To remove the title bar of a system window and achieve a borderless form
         style.TitleBar = false;
-        style.BackdropType = SystemFormBackdropType.Mica;
+        //style.BackdropType = SystemFormBackdropType.Mica;
+
 
         // 指定系统深浅色主题模式，默认将自动检测当前系统的深浅色主题模式。也可以手动指定
         // Specify the system's light or dark theme mode. By default, it will automatically detect the current system's theme mode. It can also be manually specified.
         //style.ColorMode = FormiumColorMode.Dark;
-
 
         // 是否启用网页的页面标题
         // Whether to enable the page title of the webpage.
@@ -260,6 +248,8 @@ internal class MyWindow : Formium
         // Whether to enable Kiosk mode, which disables the taskbar when enabled.
         //var style = builder.UseKisokForm();
         //style.DisableTaskBar = true;
+
+        this.Size = new Size(1440, 900);
 
         return style;
     }
